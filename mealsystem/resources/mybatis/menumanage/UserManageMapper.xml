@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserManageMapper">
+	<!--表名 -->
+	<sql id="tableName">
+	user_message
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		
+		U_ID,
+		A_NAME,
+		U_NAME,
+		U_SEX,
+		U_PHONE,
+		U_TYPE,
+		U_REMARK
+		
+
+	</sql>
+	<!-- 查询关键字 -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="keywords!= null and keywords != ''"><!-- 关键词检索 -->
+			and
+			(
+
+			A_NAME LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or
+			U_NAME LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or
+			U_TYPE LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			
+			)
+		</if>
+
+	</select>
+
+
+	<!-- 列表 全部-->
+	<select id="findById" parameterType="page" resultType="pd">
+		select *
+		from user_message where U_ID=#{id}
+	</select>
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="a_name!= null and a_name != ''">
+			a_name = #{a_name},
+		</if>
+		<if test="u_name!= null and u_name != ''">
+			u_name = #{u_name},
+		</if>
+		<if test="u_sex!= null and u_sex != ''">
+			u_sex = #{u_sex},
+		</if>
+		<if test="u_phone!= null and u_phone != ''">
+			u_phone = #{u_phone},
+		</if>
+	     <if test="u_type!= null and u_type != ''">
+			u_type = #{u_type},
+		</if>
+		<if test="u_remark!= null and u_remark != ''">
+			u_remark = #{u_remark}
+		</if>
+		where
+		u_id = #{u_id}
+	</update>
+
+
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		A_NAME,
+		U_NAME,
+		U_SEX,
+		U_PHONE,
+	    U_TYPE,
+		U_REMARK
+		
+		
+		) values (
+
+		#{a_name0},
+		#{u_name0},
+		#{u_sex0},
+		#{u_phone0},
+	    #{u_type0},
+		#{u_remark0}
+	
+		
+		)
+	</insert>
+
+
+	<!-- 删除 -->
+	<delete id="delete" parameterType="pd">
+		delete from 
+		<include refid="tableName"></include>
+		where
+		U_ID = #{id}
+	</delete>
+</mapper>
