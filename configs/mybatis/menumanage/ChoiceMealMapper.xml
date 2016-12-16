@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ChoiceMealMapper">
+	<!--表名 -->
+	<sql id="tableName">
+		meal
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		M_ID,
+		M_NAME,
+		M_PIECE,
+		M_DESCRIBE,
+		M_SALE,
+		M_DATA,
+		M_ADD_TIME,
+		M_ADD_USER,
+		M_IMAGE
+		
+	</sql>
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="keywords!= null and keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+				
+					M_NAME LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+					or
+					M_DATA LIKE CONCAT(CONCAT('%', #{keywords}),'%') 
+					or
+					M_DESCRIBE LIKE CONCAT(CONCAT('%', #{keywords}),'%') 
+				)
+		</if>
+		
+	</select>
+	
+	
+	<!-- 列表 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select * from meal where M_ID=#{id}
+	</select>
+	<select id="findclassify" parameterType="pd" resultType="pd">
+		select * from meal GROUP BY m_classify
+	</select>
+	<select id="findByTableNumber" parameterType="pd" resultType="pd">
+		select * from `table` where
+		<choose>
+                <when test="t_number!= null and t_number != ''">
+                      t_number=#{t_number}
+                </when>
+                <otherwise>
+                       t_isNull=0 
+                 </otherwise>
+         </choose>
+         order by t_id asc
+	</select>
+	<update id="settablenumber" parameterType="int">
+	update `table` set t_isNull=1 where t_id=${value}
+	</update>
+	<update id="sendask" parameterType="pd">
+	update `table` set t_isReq=${isReq} where t_number=#{t_number}
+	</update>
+	
+	
+	<!-- 新增-->
+	<insert id="addmeal" parameterType="pd">
+	insert into `order`
+	( o_time,
+		t_number,
+		o_meal,
+		o_piece,
+		o_ispay
+	) values (
+	#{o_time},
+	#{t_number},
+	#{o_meal},
+	${o_piece},
+	${o_ispay}
+	)
+</insert>
+
+	
+	<!-- 列表 -->
+	<select id="selectAnyone" parameterType="page" resultType="pd">
+		select 
+		${column}
+		from
+		${tbName}
+		<where>
+			<if test="columnName!= null and columnName != ''">
+				${columnName} = #{columnValue}
+			</if>
+			<if test="Name!= null and Name != ''">
+				and ${Name} != #{Value}
+			</if>
+		</where>
+	</select>
+</mapper>

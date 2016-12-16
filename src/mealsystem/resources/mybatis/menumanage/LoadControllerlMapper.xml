@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LoadControllerlMapper">
+	<select id="judge" parameterType="pd" resultType="pd">
+	 select account,type from account where account=#{username} and password=#{password}
+	</select>
+	
+	<select id="findauthority" parameterType="string" resultType="pd">
+	 select * from account where account=#{value};
+	</select>
+	
+	
+</mapper>

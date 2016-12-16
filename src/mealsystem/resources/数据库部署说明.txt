@@ -1,0 +1,2 @@
+该数据库以UTF-8编码。
+在dbconfig.properties中修改相应的连接

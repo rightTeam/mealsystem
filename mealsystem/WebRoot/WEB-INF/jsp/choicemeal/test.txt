@@ -1,5 +1,0 @@
- <c:when test="${not empty classifyList}">
-			<c:forEach items="${classifyList}" var="var" varStatus="vs">
-			<option value=${classifyList.m_classify} }> </option>
-			</c:forEach>
-	</c:when>
